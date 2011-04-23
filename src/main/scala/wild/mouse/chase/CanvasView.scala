@@ -24,7 +24,6 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
   var onStroke = false
   var imageBuffer: Option[Bitmap] = None
   var lastX, lastY: Int = _
-  var stroke:Stroke = new Stroke
   
   clearCanvas
 
@@ -85,13 +84,7 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
   }
 
   private def touchReleased(x: Int, y: Int) {
-    stroke.xArray = xArray
-    stroke.yArray = yArray
-//    xArray = null
-//    yArray = null
     onStroke = false
-    Log.d(this.getClass.getSimpleName, stroke.toString)
-//    for (i <- 0 to xArray.size - 1) drawBall(xArray(i), yArray(i))
     
     i = 0
     update
@@ -128,25 +121,6 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
     paint.setColor(BLUE)
     canvas.drawLine(lastX2, lastY2, x, y, paint)
   }
-
-  //	private def drawStroke(bitmap:Bitmap, stroke:Stroke) {
-  //		if (stroke.xArray.size == 0) return
-  //		val canvas:Canvas = new Canvas(bitmap)
-  //		
-  //		val paint = new Paint(Paint.ANTI_ALIAS_FLAG)
-  //		paint.setStyle(Paint.Style.STROKE)
-  //		paint.setStrokeCap(Paint.Cap.ROUND)
-  //		paint.setStrokeJoin(Paint.Join.ROUND)
-  //		paint.setStrokeWidth(penWidth)
-  //		paint.setColor(BLACK)
-  //
-  //		val path:Path = new Path
-  ////		if (stroke.xArray.get(0) == null || stroke.yArray.get(0) == null) return
-  //		path.moveTo(stroke.xArray(0), stroke.yArray(0))
-  //		for (i <- 1 to stroke.xArray.size - 1)
-  //			path.lineTo(stroke.xArray(i), stroke.yArray(i))
-  //		canvas.drawPath(path, paint)
-  //	}
 
   private class RefreshHandler extends Handler {
     def sleep(delayMillis: Long) {
