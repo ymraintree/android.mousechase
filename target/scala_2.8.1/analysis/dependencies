@@ -1,0 +1,7 @@
+#Source Dependencies
+#Sat Apr 23 00:27:49 JST 2011
+src\\main\\scala\\wild\\mouse\\chase\\Stroke.scala=src\\main\\scala\\wild\\mouse\\chase\\CanvasView.scala
+src\\main\\scala\\wild\\mouse\\chase\\CanvasView.scala=src_managed\\main\\scala\\TR.scala;src\\main\\scala\\wild\\mouse\\chase\\Activity.scala
+src_managed\\main\\scala\\TR.scala=src\\main\\scala\\wild\\mouse\\chase\\Activity.scala
+src\\main\\java\\wild\\mouse\\chase\\R.java=src_managed\\main\\scala\\TR.scala;src\\main\\scala\\wild\\mouse\\chase\\Activity.scala
+src\\main\\scala\\wild\\mouse\\chase\\Activity.scala=

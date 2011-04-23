@@ -1,0 +1,5 @@
+#External Dependencies
+#Sat Apr 23 00:27:49 JST 2011
+C\:\\app\\Android\\android-sdk\\platforms\\android-7\\android.jar=src\\main\\scala\\wild\\mouse\\chase\\CanvasView.scala;src_managed\\main\\scala\\TR.scala;src\\main\\scala\\wild\\mouse\\chase\\Activity.scala
+C\:\\Users\\yano\\eclipse-workspace-scala\\android.mousechase\\project\\boot\\scala-2.8.1\\lib\\scala-library.jar=src\\main\\scala\\wild\\mouse\\chase\\CanvasView.scala;src_managed\\main\\scala\\TR.scala;src\\main\\scala\\wild\\mouse\\chase\\Activity.scala;src\\main\\scala\\wild\\mouse\\chase\\Stroke.scala
+C\:\\Program\ Files\ (x86)\\Java\\jre6\\lib\\rt.jar=src\\main\\scala\\wild\\mouse\\chase\\CanvasView.scala;src_managed\\main\\scala\\TR.scala;src\\main\\scala\\wild\\mouse\\chase\\Activity.scala;src\\main\\scala\\wild\\mouse\\chase\\Stroke.scala
