@@ -1,3 +1,5 @@
 compile
 install-emulator
 start-emulator
+compile
+start-emulator

@@ -1,15 +1,12 @@
 package wild.mouse.chase
 
 import java.lang.Math
-import java.util.Vector
-import java.util.Date
 
 import android.os._
 import android.view._
 import android.graphics._
 import android.content._
 import android.util._
-import scala.collection.immutable.TreeMap
 import scala.collection.mutable.ListBuffer
 
 class CanvasView(context: Context, attrs: AttributeSet) extends View(context, attrs) {
@@ -23,11 +20,10 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
   val height = 860
   var onStroke = false
   var imageBuffer: Option[Bitmap] = None
-  var lastX, lastY: Int = _
+  var last: (Int, Int) = _
+  var xys: ListBuffer[(Int, Int)] = _
   
   clearCanvas
-
-  var xArray, yArray: ListBuffer[Int] = _
 
   private def clearCanvas {
     imageBuffer match {
@@ -57,30 +53,23 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
   }
 
   private def touchPressed(x: Int, y: Int) {
-    lastX = x
-    lastY = y
-    onStroke = true
-
-    xArray = new ListBuffer[Int]
-    yArray = new ListBuffer[Int]
-    xArray += x
-    yArray += y
+    last = (x, y)
+    xys = new ListBuffer[(Int, Int)]
+    // こうしないと、eclipseではエラーになってしまう
+    val now = (x, y); xys += now
   }
 
   private def touchDragged(x: Int, y: Int) {
-    drawLine(lastX, lastY, x, y)
+    drawLine(last._1, last._2, x, y)
     val penWidthHalf: Int = penWidth / 2 + 1
-    val minX = Math.min(x, lastX) - penWidthHalf
-    val maxX = Math.max(x, lastX) + penWidthHalf
-    val minY = Math.min(y, lastY) - penWidthHalf
-    val maxY = Math.max(y, lastY) + penWidthHalf
+    val minX = Math.min(x, last._1) - penWidthHalf
+    val maxX = Math.max(x, last._1) + penWidthHalf
+    val minY = Math.min(y, last._2) - penWidthHalf
+    val maxY = Math.max(y, last._2) + penWidthHalf
 
     invalidate(new Rect(minX, minY, maxX, maxY))
-    lastX = x
-    lastY = y
-
-    xArray += x
-    yArray += y
+    last = (x, y)
+    val now = (x, y); xys += now
   }
 
   private def touchReleased(x: Int, y: Int) {
@@ -93,18 +82,30 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
   private val handler = new RefreshHandler
   var i = 0
   def update {
-    if (xArray.size <= i) return
+    if (xys.size <= i - 20) return
     imageBuffer.get.eraseColor(WHITE)
-    drawBall(xArray(i), yArray(i), Color.RED)
-    if (5 <= i) drawBall(xArray(i - 5), yArray(i - 5), Color.GREEN)
-    if (10 <= i) drawBall(xArray(i - 10), yArray(i - 10), Color.BLUE)
+    drawBall(i)
     i += 1
     CanvasView.this.invalidate
     handler.sleep(150)
   }
+  
+  private def drawBall(i:Int) {
+    for (offset <- List(0, 5, 10, 15, 20)) {
+      val color = offset match {
+        case 0 => Color.RED
+        case 5 => Color.GREEN
+        case 10 => Color.YELLOW
+        case 15 => Color.MAGENTA
+        case 20 => Color.BLUE
+      }
+      if (i < xys.size && offset <= i) drawBall(xys(i - offset)._1, xys(i - offset)._2, color)
+      if (xys.size <= i) drawBall(xys.last._1, xys.last._2, color)  
+    }
+  }
 
   def drawBall(x: Int, y: Int, color:Int) {
-    Log.d(this.getClass.getSimpleName, "x=" + x + " y=" + y)
+    Log.d(this.getClass.getSimpleName, "drawBall x=" + x + " y=" + y + " color=" + color)
     val canvas: Canvas = new Canvas(imageBuffer.get)
     val paint = new Paint(Paint.ANTI_ALIAS_FLAG)
     paint.setColor(color)
@@ -113,13 +114,13 @@ class CanvasView(context: Context, attrs: AttributeSet) extends View(context, at
     invalidate
   }
 
-  private def drawLine(lastX2: Int, lastY2: Int, x: Int, y: Int) {
+  private def drawLine(lastX: Int, lastY: Int, x: Int, y: Int) {
     val canvas: Canvas = new Canvas(imageBuffer.get)
     val paint = new Paint(Paint.ANTI_ALIAS_FLAG)
     paint.setStrokeCap(Paint.Cap.ROUND)
     paint.setStrokeWidth(penWidth)
     paint.setColor(BLUE)
-    canvas.drawLine(lastX2, lastY2, x, y, paint)
+    canvas.drawLine(lastX, lastY, x, y, paint)
   }
 
   private class RefreshHandler extends Handler {

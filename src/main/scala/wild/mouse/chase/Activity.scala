@@ -14,7 +14,7 @@ class MainActivity extends Activity with TypedActivity {
     	super.onCreate(savedInstanceState)
     	setContentView(R.layout.main)
     
-    	MainActivity.canvasView = findView(TR.canvas_view)
+//    	MainActivity.canvasView = findView(TR.canvas_view)
     }
 
 }
